@@ -7,7 +7,6 @@ import random
 
 app = Flask(__name__)
 
-# Update asset 1 : add stock : 매수버튼 클릭
 @app.route('/temp', methods=['POST'])
 def temp():
     result = {}
