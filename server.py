@@ -5,7 +5,7 @@ from flask_cors import CORS
 import warnings
 from bson.objectid import ObjectId
 import requests
-from work import _get_work_list, _get_work, _create_work
+from work import _get_work_list, _get_work, _create_work, _delete_work
 
 from server_login import _login, _register
 
@@ -55,6 +55,11 @@ def get_work_list():
 @jwt_required()
 def get_work(work_id):
     return _get_work(work_id)
+
+@app.route('/work/delete/<int:work_id>', methods=['DELETE'])
+@jwt_required()
+def delete_work(work_id):
+    return _delete_work(work_id)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True, threaded=True)

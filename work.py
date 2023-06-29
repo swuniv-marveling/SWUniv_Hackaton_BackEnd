@@ -111,9 +111,29 @@ def _get_work(work_id):
             new_doc = {key: doc[key] for key in keys if key in doc}
             result['work'] = new_doc
         else:
-            raise Exception("Invalid token")
+            raise Exception("Invalid work id")
     except Exception as e:
         result['success'] = 0
     return result
 
-#def _delete_work(work_id):
+def _delete_work(work_id):
+    result = {}
+    db = client.userinfo
+    collection = db['work']
+
+    id = get_jwt_identity()
+    print(id)
+
+    try:
+        doc = collection.find_one({'_id': work_id})
+        if doc['user_id'] == id:
+            if collection.delete_one({'_id': work_id}) == 1:
+                result['success'] = 1
+            else:
+                raise Exception("Invalid work id")
+        else:
+            raise Exception("Invalid work id")
+
+    except Exception as e:
+        result['success'] = 0
+    return jsonify(result)
