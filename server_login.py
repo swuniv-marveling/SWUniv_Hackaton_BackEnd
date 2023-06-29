@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token
 from pymongo import MongoClient
 import warnings
+import json
 from bson.objectid import ObjectId
 
 warnings.simplefilter(action='ignore', category=FutureWarning) # FutureWarning 제거
@@ -10,7 +11,7 @@ client = MongoClient('mongodb://loca:loca23!@127.0.0.1', 27017)
 
 def _login(req):
     req = request.json
-    id = ObjectId(req['id'])
+    id = req['id']    #ObjectId(req['id'])
     password = req['password']
     success = False
 
@@ -24,9 +25,12 @@ def _login(req):
         # If the credentials are valid, create and return the access token
         access_token = create_access_token(identity=id)
     else:
-        return '', 401
+        return { 'success' : 0 }
     
-    return jsonify(access_token=access_token)
+    result = jsonify(access_token=access_token)
+    #result = json.dumps(res)
+    #result['success'] = 1
+    return result
 
 def _register(req):
     id = req['id']
@@ -36,7 +40,7 @@ def _register(req):
         
     # Insert into DB
     user_info = {
-        '_id': ObjectId(id),
+        '_id': id,
         'password': password,
     }
     
