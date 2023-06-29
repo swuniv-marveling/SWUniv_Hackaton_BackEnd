@@ -10,8 +10,6 @@ import io
 
 load_dotenv()
 
-app = Flask(__name__)
-
 def bucket_filename(user_id, filename):
     return str(user_id) + '/' + str(uuid.uuid4()) + '_' + secure_filename(filename)
 
@@ -21,8 +19,6 @@ def upload_file(bucket, user_id, file):
     blob.upload_from_string(file.read(), content_type=file.content_type, timeout=300)
     return blob.public_url
 
-@app.route('/work', methods=['POST'])
-@jwt_required()
 def create_work():
     user_id = get_jwt_identity()
     input_image = request.files['input']
@@ -55,10 +51,8 @@ def create_work():
 
     return
 
-@app.route('/work', methods=['GET'])
 def get_work_list():
     return
 
-@app.route('/work/<int:work_id>', methods=['GET'])
 def get_work(work_id):
     return
