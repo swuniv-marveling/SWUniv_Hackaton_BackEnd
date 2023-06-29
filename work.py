@@ -3,12 +3,18 @@ from flask import Flask, jsonify, request, abort
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
 from werkzeug.utils import secure_filename
 from google.cloud import storage
+from pymongo import MongoClient
+import warnings
 import openai
 import os
 import uuid
 import io
 
 load_dotenv()
+
+warnings.simplefilter(action='ignore', category=FutureWarning) # FutureWarning 제거
+
+client = MongoClient('mongodb://loca:loca23!@127.0.0.1', 27017)
 
 app = Flask(__name__)
 
@@ -109,3 +115,5 @@ def _get_work(work_id):
     except Exception as e:
         result['success'] = 0
     return result
+
+#def _delete_work(work_id):
