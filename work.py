@@ -41,22 +41,27 @@ def create_work():
     if input_image and mask_image:
         input_public_url = upload_file(bucket, user_id, input_image)
         mask_public_url = upload_file(bucket, user_id, mask_image)
+
+        input_image.seek(0)
+        mask_image.seek(0)
+
+        openai.api_key = os.getenv('OPENAI_KEY')
+        response = openai.Image.create_edit(
+            image=io.BufferedReader(input_image),
+            mask=io.BufferedReader(mask_image),
+            prompt=prompt,
+            n=1,
+            size="1024x1024"
+        )
     else:
         abort(400)
 
-    openai.api_key = os.getenv('OPENAI_KEY')
-    response = openai.Image.create_edit(
-        image=io.BufferedReader(input_image),
-        mask=io.BufferedReader(mask_image),
-        prompt=prompt,
-        n=1,
-        size="1024x1024"
-    )
-
     work_info = {
+        'user_id': user_id,
         'input_url': input_public_url,
         'mask_url': mask_public_url,
         'output_url': upload_output_from_url(bucket, user_id, response['data'][0]['url']),
+        'prompt_text': prompt
     }
 
     return
