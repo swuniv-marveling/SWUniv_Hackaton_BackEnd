@@ -3,6 +3,7 @@ from flask import Flask, jsonify, request, abort
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
 from werkzeug.utils import secure_filename
 from google.cloud import storage
+import requests
 from pymongo import MongoClient
 import warnings
 import openai
@@ -16,8 +17,6 @@ warnings.simplefilter(action='ignore', category=FutureWarning) # FutureWarning ì
 
 client = MongoClient('mongodb://loca:loca23!@127.0.0.1', 27017)
 
-app = Flask(__name__)
-
 def bucket_filename(user_id, filename):
     return str(user_id) + '/' + str(uuid.uuid4()) + '_' + secure_filename(filename)
 
@@ -27,8 +26,16 @@ def upload_file(bucket, user_id, file):
     blob.upload_from_string(file.read(), content_type=file.content_type, timeout=300)
     return blob.public_url
 
-#@app.route('/work', methods=['POST'])
-#@jwt_required()
+
+def upload_output_from_url(bucket, user_id, fileurl):
+    response = requests.get(fileurl)
+    image_file = response.content
+
+    filename = bucket_filename(user_id, "output.png")
+    blob = bucket.blob(filename)
+    blob.upload_from_string(image_file, content_type="image/png", timeout=300)
+    return blob.public_url
+
 def _create_work(request):
     user_id = get_jwt_identity()
     input_image = request.files['input']
@@ -41,22 +48,27 @@ def _create_work(request):
     if input_image and mask_image:
         input_public_url = upload_file(bucket, user_id, input_image)
         mask_public_url = upload_file(bucket, user_id, mask_image)
+
+        input_image.seek(0)
+        mask_image.seek(0)
+
+        openai.api_key = os.getenv('OPENAI_KEY')
+        response = openai.Image.create_edit(
+            image=io.BufferedReader(input_image),
+            mask=io.BufferedReader(mask_image),
+            prompt=prompt,
+            n=1,
+            size="1024x1024"
+        )
     else:
         abort(400)
 
-    openai.api_key = os.getenv('OPENAI_KEY')
-    response = openai.Image.create_edit(
-        image=io.BufferedReader(input_image),
-        mask=io.BufferedReader(mask_image),
-        prompt=prompt,
-        n=1,
-        size="1024x1024"
-    )
-
     work_info = {
+        'user_id': user_id,
         'input_url': input_public_url,
         'mask_url': mask_public_url,
-        'output_url': response['data'][0]['url'],
+        'output_url': upload_output_from_url(bucket, user_id, response['data'][0]['url']),
+        'prompt_text': prompt
     }
 
     return
@@ -92,8 +104,6 @@ def _get_work_list():
     result['work_list'] = work_list
     return result
 
-#@app.route('/work/<int:work_id>', methods=['GET'])
-#@jwt_required()
 def _get_work(work_id):
     result = {}
     db = client.userinfo
