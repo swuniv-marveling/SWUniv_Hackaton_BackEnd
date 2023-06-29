@@ -47,6 +47,12 @@ def create_work():
         size="1024x1024"
     )
 
+    work_info = {
+        'input_url': input_public_url,
+        'mask_url': mask_public_url,
+        'output_url': response['data'][0]['url'],
+    }
+
     return
 
 @app.route('/work', methods=['GET'])
