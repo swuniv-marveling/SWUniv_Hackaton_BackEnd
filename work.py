@@ -3,6 +3,7 @@ from flask import Flask, jsonify, request, abort
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
 from werkzeug.utils import secure_filename
 from google.cloud import storage
+import requests
 import openai
 import os
 import uuid
@@ -17,6 +18,15 @@ def upload_file(bucket, user_id, file):
     filename = bucket_filename(user_id, file.filename)
     blob = bucket.blob(filename)
     blob.upload_from_string(file.read(), content_type=file.content_type, timeout=300)
+    return blob.public_url
+
+def upload_output_from_url(bucket, user_id, fileurl):
+    response = requests.get(fileurl)
+    image_file = response.content
+
+    filename = bucket_filename(user_id, "output.png")
+    blob = bucket.blob(filename)
+    blob.upload_from_string(image_file, content_type="image/png", timeout=300)
     return blob.public_url
 
 def create_work():
@@ -46,7 +56,7 @@ def create_work():
     work_info = {
         'input_url': input_public_url,
         'mask_url': mask_public_url,
-        'output_url': response['data'][0]['url'],
+        'output_url': upload_output_from_url(bucket, user_id, response['data'][0]['url']),
     }
 
     return
