@@ -5,7 +5,7 @@ from flask_cors import CORS
 import warnings
 from bson.objectid import ObjectId
 import requests
-from work import _get_work_list, _get_work
+from work import _get_work_list, _get_work, _create_work
 
 from server_login import _login, _register
 
@@ -41,10 +41,14 @@ def build_actual_response(response):
 def register():
     return _register(request.json)
 
+@app.route('/work', methods=['POST'])
+@jwt_required()
+def create_work():
+    return _create_work(request)
+
 @app.route('/worklist', methods=['GET'])
 @jwt_required()
 def get_work_list():
-    print("??")
     return _get_work_list()
 
 @app.route('/work/<int:work_id>', methods=['GET'])
