@@ -14,6 +14,7 @@ def _login(req):
     id = req['id']    #ObjectId(req['id'])
     password = req['password']
     success = False
+    result = {}
 
     db = client.userinfo
 
@@ -21,21 +22,28 @@ def _login(req):
     for d in db['users'].find():
         if d['_id'] == id and d['password'] == password:
             success = True
+            break
     if success:
         # If the credentials are valid, create and return the access token
         access_token = create_access_token(identity=id)
+        result['access_token'] = access_token
+        result['success'] = 1
+        try:
+            result['name'] = d['name']
+        except Exception as e:
+            result['name'] = 'anonymous'
     else:
-        return { 'success' : 0 }
+        result = { 'success' : 0 }
+        make_response(result)
     
-    result = {}
-    result['access_token'] = access_token
-    result['success'] = 1
     result = make_response(result)
     return result
+
 
 def _register(req):
     id = req['id']
     password = req['password']
+    name = req['name']
     
     db = client.userinfo
         
@@ -43,6 +51,7 @@ def _register(req):
     user_info = {
         '_id': id,
         'password': password,
+        'name': name,
     }
     
     try:
