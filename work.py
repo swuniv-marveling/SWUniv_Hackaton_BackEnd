@@ -16,7 +16,7 @@ def bucket_filename(user_id, filename):
 def upload_file(bucket, user_id, file):
     filename = bucket_filename(user_id, file.filename)
     blob = bucket.blob(filename)
-    blob.upload_from_filename(file)
+    blob.upload_from_string(file.read(), content_type=file.content_type, timeout=300)
     return blob.public_url
 
 @app.route('/work', methods=['POST'])
