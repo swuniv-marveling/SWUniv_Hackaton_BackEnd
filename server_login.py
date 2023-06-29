@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, make_response
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token
 from pymongo import MongoClient
 import warnings
@@ -27,9 +27,10 @@ def _login(req):
     else:
         return { 'success' : 0 }
     
-    result = jsonify(access_token=access_token)
-    #result = json.dumps(res)
-    #result['success'] = 1
+    result = {}
+    result['access_token'] = access_token
+    result['success'] = 1
+    result = make_response(result)
     return result
 
 def _register(req):
