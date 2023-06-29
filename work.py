@@ -3,8 +3,10 @@ from flask import Flask, jsonify, request, abort
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
 from werkzeug.utils import secure_filename
 from google.cloud import storage
+import openai
 import os
 import uuid
+import io
 
 load_dotenv()
 
@@ -35,6 +37,15 @@ def create_work():
         mask_public_url = upload_file(bucket, user_id, mask_image)
     else:
         abort(400)
+
+    openai.api_key = os.getenv('OPENAI_KEY')
+    response = openai.Image.create_edit(
+        image=io.BufferedReader(input_image),
+        mask=io.BufferedReader(mask_image),
+        prompt=prompt,
+        n=1,
+        size="1024x1024"
+    )
 
     return
 
