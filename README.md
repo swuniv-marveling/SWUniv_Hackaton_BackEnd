@@ -11,7 +11,7 @@
 
 | 팀장, 백엔드 개발자 | 백엔드 개발자 | 프론트 개발자 |프론트 개발자 |디자이너|
 | :---: | :---: | :---: | :---: | :---: |
-|  <img width="160px" src="https://avatars.githubusercontent.com/u/45625362?v=4" /> | <img width="160px" src="https://avatars.githubusercontent.com/u/100757275?v=4"/> |  <img width="160px" src="https://avatars.githubusercontent.com/u/100769596?v=4" /> |  <img width="160px" src="https://avatars.githubusercontent.com/u/53892427?v=4" /> |  <img width="160px" src="https://github.com/osohyun0224/HallymFestival2023-Frontend/assets/53892427/2253a6b9-3ed7-42cd-a7e0-a16e98e922f3" /> |
+|  <img width="160px" src="https://avatars.githubusercontent.com/u/45625362?v=4" /> | <img width="160px" src="https://github.com/swuniv-marveling/SWUniv_Hackaton_BackEnd/assets/100757275/33ad9c60-e2e5-4b40-b68e-9047d8b4132a"/> |  <img width="160px" src="https://avatars.githubusercontent.com/u/100769596?v=4" /> |  <img width="160px" src="https://avatars.githubusercontent.com/u/53892427?v=4" /> |  <img width="160px" src="https://github.com/osohyun0224/HallymFestival2023-Frontend/assets/53892427/2253a6b9-3ed7-42cd-a7e0-a16e98e922f3" /> |
 | 김현재 | 최세라 | 목대희 | 오소현 | 문민서 |
 | 건국대학교 | 성균관대학교 | 아주대학교 | 한림대학교 | 신한대학교 |
 | [@hughesgoon](https://github.com/hughesgoon)| [@sera2002](https://github.com/sera2002) | [@DaeHee99](https://github.com/DaeHee99) | [@osohyun0224](https://github.com/osohyun0224)    | [@mminseo8](https://flint-check-397.notion.site/8ce01a0f83d74c6c8a53b25f3c0ae922?pvs=4) |
