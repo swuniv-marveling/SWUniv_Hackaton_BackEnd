@@ -16,17 +16,13 @@
 | 건국대학교 | 성균관대학교 | 아주대학교 | 한림대학교 | 신한대학교 |
 | [@hughesgoon](https://github.com/hughesgoon)| [@sera2002](https://github.com/sera2002) | [@DaeHee99](https://github.com/DaeHee99) | [@osohyun0224](https://github.com/osohyun0224)    | [@mminseo8](https://flint-check-397.notion.site/8ce01a0f83d74c6c8a53b25f3c0ae922?pvs=4) |
 
-## 👨🏻‍💻 FrontEnd Packages
-- React
-- React Konva
-- React Router Dom
-- React Icons
-- Styled-Componets
-- Redux
-- Axios
-
-### Dev Packages
-- Prettier
+## 👨🏻‍💻 BackEnd Packages
+- Flask
+- Werkzeug
+- Requests
+- Google Cloud Client Library
+- Flask JWT Extended
+- MongoDB
 
 ## 📚 Tech Stacks
 
